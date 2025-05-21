@@ -47,4 +47,40 @@ def redirect_speichern(Dateien):
         for i in Redirects:
             file.write(i + "\n")
 
-Ordner_prüfen()
+
+def redirects_zu_echten_Links():
+    from selenium import webdriver
+    Redirects = []
+    with open("X:/redirects_fehlend.txt", "r") as file:
+        Redirects = file.read().split("\n")
+
+    Redirect_Temp = []
+
+    for i in Redirects:
+        try:
+            if i.split(".")[1] != "html":
+                Redirect_Temp.append(i)
+        except IndexError:
+            Redirect_Temp.append(i)
+    Redirects = Redirect_Temp
+    print(len(Redirects))
+    Links_Echt = []
+
+
+    driver = webdriver.Chrome()
+
+    Speichern = 10
+
+    #noch die segmente erkennen und weitermachen nach bedarf
+
+    for i in range(len(Redirects)):
+        driver.get(f"https://aniworld.to/redirect/{Redirects[i]}")
+        Links_Echt.append(Redirects[i] + "=" + driver.current_url)
+        if len(Links_Echt) == Speichern:
+            with open(f"X:/links_echt/links_echt_{int(i/Speichern)}", "w") as file:
+                for a in Links_Echt:
+                    file.write(a + "\n")
+            Links_Echt = []
+
+redirects_zu_echten_Links()
+#Ordner_prüfen()

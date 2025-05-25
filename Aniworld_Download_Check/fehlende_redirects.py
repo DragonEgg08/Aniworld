@@ -1,4 +1,7 @@
 import os
+from asyncio.windows_events import INFINITE
+
+from selenium.webdriver.support.color import RGB_PATTERN
 
 
 def Ordner_prüfen():
@@ -47,7 +50,6 @@ def redirect_speichern(Dateien):
         for i in Redirects:
             file.write(i + "\n")
 
-
 def redirects_zu_echten_Links():
     from selenium import webdriver
     Redirects = []
@@ -86,5 +88,23 @@ def redirects_zu_echten_Links():
                         file.write(a + "\n")
                 Links_Echt = []
 
+def redirects_überprüfen():
+    Redirects_Fehlend_Bisher = open("X:/redirects_fehlend.txt").read().split("\n")
+    Redirects_Gefunden_Dateien = os.listdir("X:/links_echt")
+    print(len(Redirects_Fehlend_Bisher))
+
+    for i in range(INFINITE):
+        try:
+            Redirects_Runtergeladen = open(f"X:/links_echt/links_echt_{i}").read().split("\n")
+        except FileNotFoundError:
+            break
+
+        for a in Redirects_Runtergeladen:
+            if a.split("=")[0] in Redirects_Fehlend_Bisher:
+                Redirects_Fehlend_Bisher.remove(a.split("=")[0])
+
+    print(len(Redirects_Fehlend_Bisher))
+
 redirects_zu_echten_Links()
 #Ordner_prüfen()
+#redirects_überprüfen()

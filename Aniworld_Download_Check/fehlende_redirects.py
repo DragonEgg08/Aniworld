@@ -70,9 +70,7 @@ def redirects_zu_echten_Links():
     driver = webdriver.Chrome()
 
     Speichern = 10
-    Segmente_Downloaded = int(os.listdir("X:/links_echt")[-1].split("_")[-1])
-
-    #noch die segmente erkennen und weitermachen nach bedarf
+    Segmente_Downloaded = 770
 
     if not os.path.exists("X:/links_echt"):
         os.makedirs("X:/links_echt")

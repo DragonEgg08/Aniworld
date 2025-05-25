@@ -70,17 +70,23 @@ def redirects_zu_echten_Links():
     driver = webdriver.Chrome()
 
     Speichern = 10
+    Segmente_Downloaded = int(os.listdir("X:/links_echt")[-1].split("_")[-1])
 
     #noch die segmente erkennen und weitermachen nach bedarf
 
+    if not os.path.exists("X:/links_echt"):
+        os.makedirs("X:/links_echt")
+
     for i in range(len(Redirects)):
-        driver.get(f"https://aniworld.to/redirect/{Redirects[i]}")
-        Links_Echt.append(Redirects[i] + "=" + driver.current_url)
-        if len(Links_Echt) == Speichern:
-            with open(f"X:/links_echt/links_echt_{int(i/Speichern)}", "w") as file:
-                for a in Links_Echt:
-                    file.write(a + "\n")
-            Links_Echt = []
+        if Segmente_Downloaded != 0 and int(i/Speichern) > Segmente_Downloaded:
+            print(str(round(i/len(Redirects)*100, 3)) + "%")
+            driver.get(f"https://aniworld.to/redirect/{Redirects[i]}")
+            Links_Echt.append(Redirects[i] + "=" + driver.current_url)
+            if len(Links_Echt) == Speichern:
+                with open(f"X:/links_echt/links_echt_{int(i/Speichern)}", "w") as file:
+                    for a in Links_Echt:
+                        file.write(a + "\n")
+                Links_Echt = []
 
 redirects_zu_echten_Links()
 #Ordner_prüfen()

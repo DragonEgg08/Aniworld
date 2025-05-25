@@ -73,13 +73,12 @@ def redirects_zu_echten_Links():
 
     Speichern = 10
 
-    Größte_Zahl = 0
+    Segmente_Downloaded = 0
+
     for i in os.listdir("X:/links_echt"):
         Temp = int(i.split("_")[-1])
-        if Temp > Größte_Zahl:
-            Größte_Zahl = Temp
-            
-    Segmente_Downloaded = 770
+        if Temp > Segmente_Downloaded:
+            Segmente_Downloaded = Temp
 
     if not os.path.exists("X:/links_echt"):
         os.makedirs("X:/links_echt")

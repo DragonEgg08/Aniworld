@@ -88,7 +88,7 @@ def redirects_zu_echten_Links():
             driver.get(f"https://aniworld.to/redirect/{Redirects[i]}")
             Links_Echt.append(Redirects[i] + "=" + driver.current_url)
             if len(Links_Echt) == Speichern:
-                print(str(round(i / len(Redirects) * 100, 3)) + f"% | {i} Dateien")
+                print(str(round(i / len(Redirects) * 100, 3)) + f"% | {int(i/Speichern)} Dateien")
                 with open(f"X:/links_echt/links_echt_{int(i/Speichern)}", "w") as file:
                     for a in Links_Echt:
                         file.write(a + "\n")

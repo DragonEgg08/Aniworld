@@ -91,7 +91,7 @@ def redirects_zu_echten_Links():
 def redirects_überprüfen():
     Redirects_Fehlend_Bisher = open("X:/redirects_fehlend.txt").read().split("\n")
     Redirects_Gefunden_Dateien = os.listdir("X:/links_echt")
-    print(len(Redirects_Fehlend_Bisher))
+    Anzahl_Bevor = len(Redirects_Fehlend_Bisher)
 
     for i in range(INFINITE):
         try:
@@ -103,7 +103,8 @@ def redirects_überprüfen():
             if a.split("=")[0] in Redirects_Fehlend_Bisher:
                 Redirects_Fehlend_Bisher.remove(a.split("=")[0])
 
-    print(len(Redirects_Fehlend_Bisher))
+    Anzahl_Danach = len(Redirects_Fehlend_Bisher)
+    print(f"{Anzahl_Bevor-Anzahl_Danach} runtergeladen von {Anzahl_Bevor}")
 
 redirects_zu_echten_Links()
 #Ordner_prüfen()

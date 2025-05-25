@@ -86,7 +86,6 @@ def redirects_zu_echten_Links():
 
     for i in range(len(Redirects)):
         if Segmente_Downloaded != 0 and int(i/Speichern) > Segmente_Downloaded:
-            print(str(round(i/len(Redirects)*100, 3)) + "%")
             driver.get(f"https://aniworld.to/redirect/{Redirects[i]}")
             Links_Echt.append(Redirects[i] + "=" + driver.current_url)
             if len(Links_Echt) == Speichern:

@@ -72,6 +72,13 @@ def redirects_zu_echten_Links():
     driver = webdriver.Chrome()
 
     Speichern = 10
+
+    Größte_Zahl = 0
+    for i in os.listdir("X:/links_echt"):
+        Temp = int(i.split("_")[-1])
+        if Temp > Größte_Zahl:
+            Größte_Zahl = Temp
+            
     Segmente_Downloaded = 770
 
     if not os.path.exists("X:/links_echt"):

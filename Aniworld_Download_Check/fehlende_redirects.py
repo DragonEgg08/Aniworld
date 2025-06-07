@@ -95,11 +95,19 @@ def redirects_zu_echten_Links():
                 Links_Echt = []
 
 def redirects_überprüfen():
+    Segmente_Downloaded = 0
+    for i in os.listdir("X:/links_echt"):
+        Temp = int(i.split("_")[-1])
+        if Temp > Segmente_Downloaded:
+            Segmente_Downloaded = Temp
+
     Redirects_Fehlend_Bisher = open("X:/redirects_fehlend.txt").read().split("\n")
     Redirects_Gefunden_Dateien = os.listdir("X:/links_echt")
     Anzahl_Bevor = len(Redirects_Fehlend_Bisher)
+    print("wird überprüft...")
 
     for i in range(INFINITE):
+        print("Fortschritt: " + str(round(i/Segmente_Downloaded*100, 2)) + "%")
         try:
             Redirects_Runtergeladen = open(f"X:/links_echt/links_echt_{i}").read().split("\n")
         except FileNotFoundError:
@@ -111,7 +119,16 @@ def redirects_überprüfen():
 
     Anzahl_Danach = len(Redirects_Fehlend_Bisher)
     print(f"{Anzahl_Bevor-Anzahl_Danach} runtergeladen von {Anzahl_Bevor}")
+    print("Bei " + str((round(Anzahl_Bevor-Anzahl_Danach)/Anzahl_Bevor*100, 2)) + "%")
+    input()
 
-redirects_zu_echten_Links()
+I = input("prüfen oder laden?: ")
+
+if I == "prüfen":
+    redirects_überprüfen()
+elif I == "laden":
+    redirects_zu_echten_Links()
+
+#redirects_zu_echten_Links()
 #Ordner_prüfen()
 #redirects_überprüfen()

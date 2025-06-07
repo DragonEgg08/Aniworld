@@ -1,5 +1,6 @@
 import subprocess
 import pathlib
+import yt_dlp
 
 def Download(Folgen_Metadaten, Bestimmte_Folgen, Download_Ordner, Linux):
     # Metadaten:
@@ -17,7 +18,7 @@ def Download(Folgen_Metadaten, Bestimmte_Folgen, Download_Ordner, Linux):
 
             if not Linux:
                 subprocess.run(
-                    f'"Aniworld_Downloader/yt-dlp.exe" --external-downloader "Aniworld_Downloader/aria2c.exe" --external-downloader-args "-x 16 -s 16 -k 1M" {Folgen_Metadaten[5][i]} '
+                    f'"yt-dlp.exe" --external-downloader "aria2c.exe" --external-downloader-args "-x 16 -s 16 -k 1M" {Folgen_Metadaten[5][i]} '
                     f'-o "{Folgen_Metadaten[0]} S{Folgen_Metadaten[1]} F{Folgen_Metadaten[2][i]} {chr(39) + Folgen_Metadaten[3][i] + chr(39)}.mp4" -P "{Download_Ordner}"', cwd=Aktueller_Pfad)
             else:
                 try:

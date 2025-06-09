@@ -10,7 +10,7 @@ def Metadaten_schreiben(Folgen_Metadaten, Serien_Name, Gespeicherte_Staffeln_Pfa
     if not os.path.exists(Gespeicherte_Staffeln_Pfad):
         os.makedirs(Gespeicherte_Staffeln_Pfad)
     Folgen_Metadaten[4] = ""
-    with open(Gespeicherte_Staffeln_Pfad + Serien_Name + "_" + str(Folgen_Metadaten[1]), "a") as file:
+    with open(Gespeicherte_Staffeln_Pfad + Serien_Name + "_" + str(Folgen_Metadaten[1]), encoding="UTF-8", mode="a") as file:
         file.write(
             f"{Folgen_Metadaten[0]}/{Folgen_Metadaten[1]}\n")
 

@@ -124,10 +124,13 @@ def redirects_überprüfen():
 
 I = input("prüfen oder laden?: ")
 
-if I == "prüfen":
-    redirects_überprüfen()
-elif I == "laden":
-    redirects_zu_echten_Links()
+while True:
+    if I == "prüfen":
+        redirects_überprüfen()
+        break
+    elif I == "laden":
+        redirects_zu_echten_Links()
+        break
 
 #redirects_zu_echten_Links()
 #Ordner_prüfen()

@@ -32,20 +32,9 @@ def Index_Check():
 def Download_Ordner_Auswahl() -> str:
     return filedialog.askdirectory(title="Ordner zum Downloaden auswählen")
 
-def Selenium_vorbereiten(Linux, Serienname_geholt):
-    from selenium import webdriver
-    from selenium.webdriver.chrome.service import Service
-    from selenium.webdriver.chrome.options import Options
-    from webdriver_manager.chrome import ChromeDriverManager
-    if Linux:
-        service = Service(ChromeDriverManager().install())
-        options = Options()
-        if Serienname_geholt:
-            options.add_argument("--headless=new")
-    else:
-        service = Service()
-        options = Options()
-        #options.add_argument('--headless=new')
+def Selenium_vorbereiten(Linux, Serienname_geholt, play):
+    from playwright.sync_api import sync_playwright
 
-    driver = webdriver.Chrome(service=service, options=options)
-    return driver
+    Browser = play.firefox.launch(headless=False)
+    Seite = Browser.new_page()
+    return Seite

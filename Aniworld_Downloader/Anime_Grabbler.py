@@ -1,29 +1,33 @@
-from selenium.webdriver.common.by import By
+from playwright.sync_api import sync_playwright
 import main_Unterprogramme
 
-Staffelsucher_XPATH = "/html/body/div/div[2]/div[2]/div[2]/ul[1]/li["
+Staffelsucher_XPATH = "xpath=/html/body/div/div[2]/div[2]/div[2]/ul[1]/li["
 
 #Web_Grabbler == Selenium-Driver
 
 def Staffeln_Suchen(URL, Linux):
-    Web_Grabbler = main_Unterprogramme.Selenium_vorbereiten(Linux, False)
-    Web_Grabbler.get(URL)
-    Staffel_Speicher = []
-    while True:
-        try:
-            Serien_Name = Web_Grabbler.find_element(By.XPATH, "/html/body/div/div[2]/div[1]/section/div[2]/div[2]/div[1]/h1/span").text
-            if Serien_Name != "":
-                break
-        except:
-            None
+    with sync_playwright() as play:
+        Web_Grabbler = main_Unterprogramme.Selenium_vorbereiten(Linux, False, play)
+        Web_Grabbler.goto("https://aniworld.to/anime/stream/maken-ki")
+        Staffel_Speicher = []
+        while True:
+            try:
+                Serien_Name_Xpath = "xpath=/html/body/div/div[2]/div[1]/section/div[2]/div[2]/div[1]/h1/span"
+                Web_Grabbler.wait_for_selector(Serien_Name_Xpath, state="visible")
+                Serien_Name = Web_Grabbler.locator(Serien_Name_Xpath).text_content()
+                print(Serien_Name)
+                if Serien_Name != "":
+                    break
+            except:
+                None
 
-    for i in range(2, 9999):
-        try:
-            Staffel_Speicher.append(Web_Grabbler.find_element(By.XPATH, Staffelsucher_XPATH + str(i) + "]").text)
-        except:
-            break
-    Web_Grabbler.close()
-    return Staffel_Speicher, Serien_Name
+        for i in range(2, 9999):
+            try:
+                Staffel_Speicher.append(Web_Grabbler.find_element(By.XPATH, Staffelsucher_XPATH + str(i) + "]").text)
+            except:
+                break
+        Web_Grabbler.close()
+        return Staffel_Speicher, Serien_Name
 
 
 def Folgen_Suchen(URL, Staffeln_zum_Downloaden, Index_Staffel, Folgen_Metadaten, Linux, Filme):
@@ -104,3 +108,6 @@ def Videoza_Link_Suchen(Folgen_Metadaten, Linux):
         Folgen_Metadaten[5].append(Web_Grabbler.current_url)
     Web_Grabbler.close()
     return Folgen_Metadaten
+
+
+Staffeln_Suchen("https://luluvdo.com/embed/p5ug3phsiqd3", False)

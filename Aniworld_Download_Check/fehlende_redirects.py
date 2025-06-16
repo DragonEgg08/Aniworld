@@ -122,9 +122,10 @@ def redirects_überprüfen():
     print("Bei " + str((round(Anzahl_Bevor-Anzahl_Danach)/Anzahl_Bevor*100, 2)) + "%")
     input()
 
-I = input("prüfen oder laden?: ")
+
 
 while True:
+    I = input("prüfen oder laden?: ")
     if I == "prüfen":
         redirects_überprüfen()
         break

@@ -32,7 +32,7 @@ def Index_Check():
 def Download_Ordner_Auswahl() -> str:
     return filedialog.askdirectory(title="Ordner zum Downloaden auswählen")
 
-def Selenium_vorbereiten(Linux, Serienname_geholt, play):
+def Selenium_vorbereiten(play):
     from playwright.sync_api import sync_playwright
 
     Browser = play.firefox.launch(headless=False)

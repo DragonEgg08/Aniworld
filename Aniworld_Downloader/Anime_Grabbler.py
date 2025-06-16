@@ -5,10 +5,10 @@ Staffelsucher_XPATH = "xpath=/html/body/div/div[2]/div[2]/div[2]/ul[1]/li["
 
 #Web_Grabbler == Selenium-Driver
 
-def Staffeln_Suchen(URL, Linux):
+def Staffeln_Suchen(URL):
     with sync_playwright() as play:
-        Web_Grabbler = main_Unterprogramme.Selenium_vorbereiten(Linux, False, play)
-        Web_Grabbler.goto("https://aniworld.to/anime/stream/maken-ki")
+        Web_Grabbler = main_Unterprogramme.Selenium_vorbereiten(play)
+        Web_Grabbler.goto(URL)
         Staffel_Speicher = []
         while True:
             try:
@@ -23,42 +23,43 @@ def Staffeln_Suchen(URL, Linux):
 
         for i in range(2, 9999):
             try:
-                Staffel_Speicher.append(Web_Grabbler.find_element(By.XPATH, Staffelsucher_XPATH + str(i) + "]").text)
+                Staffel_Speicher.append(Web_Grabbler.locator(Staffelsucher_XPATH + str(i) + "]").text_content())
+                print(Staffel_Speicher)
             except:
                 break
-        Web_Grabbler.close()
         return Staffel_Speicher, Serien_Name
 
 
 def Folgen_Suchen(URL, Staffeln_zum_Downloaden, Index_Staffel, Folgen_Metadaten, Linux, Filme):
-    Web_Grabbler = main_Unterprogramme.Selenium_vorbereiten(Linux, True)
-    Web_Grabbler.get(URL)
+    with sync_playwright() as play:
+        Web_Grabbler = main_Unterprogramme.Selenium_vorbereiten(play)
+        Web_Grabbler.goto(URL)
 
-    Folgensucher_XPATH = "/html/body/div/div[2]/div[2]/div[3]/table/tbody/tr["
+        Folgensucher_XPATH = "/html/body/div/div[2]/div[2]/div[3]/table/tbody/tr["
 
-    if not Filme:
-        Index_Staffel -= 1
+        if not Filme:
+            Index_Staffel -= 1
 
-    if type(Staffeln_zum_Downloaden) != "<class 'list'>":
-        Web_Grabbler.find_element(By.XPATH, Staffelsucher_XPATH + str(Index_Staffel) + "]/a").click()
-        # Metadaten:
-        # Staffel, Staffelnummer, Folgennummer, Name, Link, Nachhergehender Videoza_Link
+        if type(Staffeln_zum_Downloaden) != "<class 'list'>":
+            Web_Grabbler.find_element(By.XPATH, Staffelsucher_XPATH + str(Index_Staffel) + "]/a").click()
+            # Metadaten:
+            # Staffel, Staffelnummer, Folgennummer, Name, Link, Nachhergehender Videoza_Link
 
-        for i in range(1, 9999):
-            try:
-                XPATH_Folge = Folgensucher_XPATH + str(i) + "]"
-                Folgenname = Web_Grabbler.find_element(By.XPATH, XPATH_Folge + "/td[2]/a/strong").text
-                if Folgenname != "":
-                    Folgen_Metadaten[3].append(Folgenname)
-                else:
-                    Folgen_Metadaten[3].append(Web_Grabbler.find_element(By.XPATH, XPATH_Folge + "/td[2]/a/span").text)
-                Folgen_Metadaten[4].append(
-                    Web_Grabbler.find_element(By.XPATH, XPATH_Folge + "/td[3]/a").get_attribute("href"))
-                Folgen_Metadaten[2].append(i)
-            except:
-                break
-        Web_Grabbler.close()
-        return Folgen_Metadaten
+            for i in range(1, 9999):
+                try:
+                    XPATH_Folge = Folgensucher_XPATH + str(i) + "]"
+                    Folgenname = Web_Grabbler.find_element(By.XPATH, XPATH_Folge + "/td[2]/a/strong").text
+                    if Folgenname != "":
+                        Folgen_Metadaten[3].append(Folgenname)
+                    else:
+                        Folgen_Metadaten[3].append(Web_Grabbler.find_element(By.XPATH, XPATH_Folge + "/td[2]/a/span").text)
+                    Folgen_Metadaten[4].append(
+                        Web_Grabbler.find_element(By.XPATH, XPATH_Folge + "/td[3]/a").get_attribute("href"))
+                    Folgen_Metadaten[2].append(i)
+                except:
+                    break
+            Web_Grabbler.close()
+            return Folgen_Metadaten
 
 
 def Videoza_Link_Suchen(Folgen_Metadaten, Linux):

@@ -1,8 +1,6 @@
 import os
 from asyncio.windows_events import INFINITE
 
-from selenium.webdriver.support.color import RGB_PATTERN
-
 
 def Ordner_prüfen():
     Folgen_Dateien = []
@@ -69,8 +67,9 @@ def redirects_zu_echten_Links():
     Links_Echt = []
 
 
-    driver = webdriver.Chrome()
+    from playwright.sync_api import sync_playwright as play
 
+    Browser = play.firefox.launch(headless=False)
     Speichern = 10
 
     Segmente_Downloaded = 0
@@ -85,8 +84,8 @@ def redirects_zu_echten_Links():
 
     for i in range(len(Redirects)):
         if Segmente_Downloaded != 0 and int(i/Speichern) > Segmente_Downloaded:
-            driver.get(f"https://aniworld.to/redirect/{Redirects[i]}")
-            Links_Echt.append(Redirects[i] + "=" + driver.current_url)
+            Seite = Browser.newPage (f"https://aniworld.to/redirect/{Redirects[i]}")
+            Links_Echt.append(Redirects[i] + "=" + Seite.)
             if len(Links_Echt) == Speichern:
                 print(str(round(i / len(Redirects) * 100, 3)) + f"% | {int(i/Speichern)} Dateien")
                 with open(f"X:/links_echt/links_echt_{int(i/Speichern)}", "w") as file:

@@ -1,5 +1,6 @@
 import os
 from asyncio.windows_events import INFINITE
+from playwright.sync_api import sync_playwright
 
 
 def Ordner_prüfen():
@@ -49,49 +50,50 @@ def redirect_speichern(Dateien):
             file.write(i + "\n")
 
 def redirects_zu_echten_Links():
-    from selenium import webdriver
-    Redirects = []
-    with open("X:/redirects_fehlend.txt", "r") as file:
-        Redirects = file.read().split("\n")
+    while True:
+        Redirects = []
+        with open("X:/redirects_fehlend.txt", "r") as file:
+            Redirects = file.read().split("\n")
 
-    Redirect_Temp = []
+        Redirect_Temp = []
 
-    for i in Redirects:
-        try:
-            if i.split(".")[1] != "html":
+        for i in Redirects:
+            try:
+                if i.split(".")[1] != "html":
+                    Redirect_Temp.append(i)
+            except IndexError:
                 Redirect_Temp.append(i)
-        except IndexError:
-            Redirect_Temp.append(i)
-    Redirects = Redirect_Temp
-    print(len(Redirects))
-    Links_Echt = []
+        Redirects = Redirect_Temp
+        print(len(Redirects))
+        Links_Echt = []
 
+        Speichern = 10
 
-    from playwright.sync_api import sync_playwright as play
+        Segmente_Downloaded = 0
 
-    Browser = play.firefox.launch(headless=False)
-    Speichern = 10
+        for i in os.listdir("X:/links_echt"):
+            Temp = int(i.split("_")[-1])
+            if Temp > Segmente_Downloaded:
+                Segmente_Downloaded = Temp
 
-    Segmente_Downloaded = 0
-
-    for i in os.listdir("X:/links_echt"):
-        Temp = int(i.split("_")[-1])
-        if Temp > Segmente_Downloaded:
-            Segmente_Downloaded = Temp
-
-    if not os.path.exists("X:/links_echt"):
-        os.makedirs("X:/links_echt")
-
-    for i in range(len(Redirects)):
-        if Segmente_Downloaded != 0 and int(i/Speichern) > Segmente_Downloaded:
-            Seite = Browser.newPage (f"https://aniworld.to/redirect/{Redirects[i]}")
-            Links_Echt.append(Redirects[i] + "=" + Seite.)
-            if len(Links_Echt) == Speichern:
-                print(str(round(i / len(Redirects) * 100, 3)) + f"% | {int(i/Speichern)} Dateien")
-                with open(f"X:/links_echt/links_echt_{int(i/Speichern)}", "w") as file:
-                    for a in Links_Echt:
-                        file.write(a + "\n")
-                Links_Echt = []
+        if not os.path.exists("X:/links_echt"):
+            os.makedirs("X:/links_echt")
+        try:
+            with sync_playwright() as play:
+                Browser = play.firefox.launch(headless=False, timeout=42949294)
+                Seite = Browser.new_page()
+                for i in range(len(Redirects)):
+                    if Segmente_Downloaded != 0 and int(i/Speichern) > Segmente_Downloaded:
+                        Seite.goto(f"https://aniworld.to/redirect/{Redirects[i]}", timeout=999999999)
+                        Links_Echt.append(Redirects[i] + "=" + Seite.url)
+                        if len(Links_Echt) == Speichern:
+                            print(str(round(i / len(Redirects) * 100, 3)) + f"% | {int(i/Speichern)} Dateien")
+                            with open(f"X:/links_echt/links_echt_{int(i/Speichern)}", "w") as file:
+                                for a in Links_Echt:
+                                    file.write(a + "\n")
+                            Links_Echt = []
+        except:
+            None
 
 def redirects_überprüfen():
     Segmente_Downloaded = 0

@@ -9,7 +9,7 @@ def VMAF_Score_Rechner(Output: Path):
     Array = []
     Höchster_Score = 0.0
     Niedrigster_Score_Array = []
-    Niedrigster_Score_Array_Qualität = [0,0,0]
+    Niedrigster_Score_Array_Qualität = [0,0,0,0]
     Rechnung = 0
     for i in Output:
         try:
@@ -42,11 +42,12 @@ def VMAF_Score_Rechner(Output: Path):
             Niedrigster_Score_Array_Qualität[1] += 1
         elif 0 < i <= 29.5:
             Niedrigster_Score_Array_Qualität[2] += 1
-
-    print(f"\nScores für die schlechten Frames:\nScore 69-50: {Niedrigster_Score_Array_Qualität[0]}; {round(Niedrigster_Score_Array_Qualität[0]/len(Niedrigster_Score_Array)*100, 2)}% Durchschnittliche Qualität, sichtbare Artefakte und Verluste")
-    print(f"Score 30-49: {Niedrigster_Score_Array_Qualität[1]}; {round(Niedrigster_Score_Array_Qualität[1]/len(Niedrigster_Score_Array)*100, 2)}% Unterdurchschnittliche Qualität, deutliche Artefakte und Verluste")
-    print(f"Score 0-29: {Niedrigster_Score_Array_Qualität[2]}; {round(Niedrigster_Score_Array_Qualität[2]/len(Niedrigster_Score_Array)*100, 2)}% Schlechte Qualität, stark beeinträchtigt")
-
+    try:
+        print(f"\nScores für die schlechten Frames:\nScore 69-50: {Niedrigster_Score_Array_Qualität[0]}; {round(Niedrigster_Score_Array_Qualität[0]/len(Niedrigster_Score_Array)*100, 2)}% Durchschnittliche Qualität, sichtbare Artefakte und Verluste")
+        print(f"Score 30-49: {Niedrigster_Score_Array_Qualität[1]}; {round(Niedrigster_Score_Array_Qualität[1]/len(Niedrigster_Score_Array)*100, 2)}% Unterdurchschnittliche Qualität, deutliche Artefakte und Verluste")
+        print(f"Score 0-29: {Niedrigster_Score_Array_Qualität[2]}; {round(Niedrigster_Score_Array_Qualität[2]/len(Niedrigster_Score_Array)*100, 2)}% Schlechte Qualität, stark beeinträchtigt")
+    except ZeroDivisionError:
+        print("ZDE")
 
 #90-100: Exzellente Qualität, kaum wahrnehmbare Unterschiede zum Original.
 #70-89: Gute Qualität, geringe Artefakte oder Verluste.
@@ -62,7 +63,7 @@ def Qualität_berechnen(Video_Original: str, Video_Komprimiert: str):
         '[ref][dist]libvmaf=log_path=vmaf_results.json:log_fmt=json:n_threads=16"'
         ' -f null -'
     )
-    os.system(f'start cmd /k "{"X: &&" + Befehl}"')
+    os.system(f'start cmd /k "{"X: &&" + Befehl}" && exit')
 
 Was_tun = input("Möchtest du die Qualität berechen [QB] oder die Qualität Auswerten [QA]?: ").lower()
 

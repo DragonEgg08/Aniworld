@@ -80,11 +80,11 @@ def redirects_zu_echten_Links():
             os.makedirs("X:/links_echt")
         try:
             with sync_playwright() as play:
-                Browser = play.firefox.launch(headless=False, timeout=42949294)
+                Browser = play.firefox.launch(headless=True)
                 Seite = Browser.new_page()
                 for i in range(len(Redirects)):
                     if Segmente_Downloaded != 0 and int(i/Speichern) > Segmente_Downloaded:
-                        Seite.goto(f"https://aniworld.to/redirect/{Redirects[i]}", timeout=999999999)
+                        Seite.goto(f"https://aniworld.to/redirect/{Redirects[i]}", timeout=10000)
                         Links_Echt.append(Redirects[i] + "=" + Seite.url)
                         if len(Links_Echt) == Speichern:
                             print(str(round(i / len(Redirects) * 100, 3)) + f"% | {int(i/Speichern)} Dateien")

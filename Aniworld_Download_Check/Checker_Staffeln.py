@@ -1,33 +1,45 @@
 import os.path
-from selenium.webdriver.common.by import By
+from asyncio.windows_events import INFINITE
+from playwright.sync_api import sync_playwright as play
 
-def Staffeln_Suchen(webdriver):
-    webdriver.get("https://aniworld.to/animes")
-    Staffeln = []
 
-    for i in range(1, 99999999999):
-        try:
-            webdriver.find_element(By.XPATH, f"/html/body/div/div[2]/div[4]/div[{i}]")
-        except:
-            break
-        for a in range(1, 9999999999):
-            print(str(i) + "-" + str(a))
+def Staffeln_Suchen():
+    with play() as p:
+        Browser = p.firefox.launch(headless=False)
+        Seite = Browser.new_page()
+        Seite.goto("https://aniworld.to/animes")
+        Staffeln = []
+
+        for i in range(1, INFINITE):
             try:
-                Staffeln.append(webdriver.find_element(By.XPATH, f"/html/body/div/div[2]/div[4]/div[{i}]/ul/li[{a}]/a").get_attribute("href").split("/")[-1])
+                Seite.locator(f"xpath=/html/body/div/div[2]/div[4]/div[{i}]/div/h3").text_content(timeout=1000)
             except:
                 break
-    with open("Staffeln_gefunden", "w") as file:
-        for i in Staffeln:
-            file.write(i + "\n")
-    Staffeln_Prüfen(Staffeln)
+
+            for a in range(1, INFINITE):
+                print(str(i) + "-" + str(a))
+                try:
+                    Link = Seite.locator(f"xpath=/html/body/div/div[2]/div[4]/div[{i}]/ul/li[{a}]/a").get_attribute("href", timeout=500)
+                    Staffeln.append(Link)
+                except:
+                    break
+
+        print(len(Staffeln))
+        with open("X:/Staffeln_gefunden", "w") as file:
+            for i in Staffeln:
+                file.write(i + "\n")
+        Staffeln_Prüfen(Staffeln)
 
 def Staffeln_Prüfen(Staffeln):
     Fehlende_Staffeln = []
 
     for i in Staffeln:
-        if not os.path.exists(f"X:\\Aniworld\\aniworld.to\\anime\\stream\\{i}"):
+        if not os.path.exists(f"X:/Aniworld/Aniworld/aniworld.to{i}"):
             Fehlende_Staffeln.append(i)
 
-    with open("Staffeln_Fehlend", "w") as file:
+    with open("X:/Staffeln_Fehlend", "w") as file:
         for i in Fehlende_Staffeln:
             file.write(i + "\n")
+
+Staffeln = open("X:/Staffeln_gefunden", "r").read().split("\n")
+Staffeln_Prüfen(Staffeln)

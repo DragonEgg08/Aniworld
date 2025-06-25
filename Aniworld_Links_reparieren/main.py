@@ -2,6 +2,7 @@ import os
 
 from Bilder_Verlinken import Bilder_Verlinken
 
+# Nur für Dateien in /anime/stream
 def Ordner_prüfen() -> str:
     Folgen_Dateien = []
     Pfad = "X:/Aniworld/Aniworld/aniworld.to/anime/stream/"
@@ -23,5 +24,6 @@ def Ordner_prüfen() -> str:
             break
     return Folgen_Dateien
 
-for i in Ordner_prüfen():
-    Bilder_Verlinken(i)
+Bilder_Verlinken(Ordner_prüfen())
+#for i in Ordner_prüfen():
+#    Bilder_Verlinken(i)

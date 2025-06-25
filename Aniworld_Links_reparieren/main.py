@@ -1,4 +1,27 @@
-from Bilder_Verlinken import Bilder_Verlinken
-from Links_Offline_Setzen import Links_Offline_Setzen
+import os
 
-Bilder_Verlinken("X:/Aniworld/Aniworld/aniworld.to/index.html")
+from Bilder_Verlinken import Bilder_Verlinken
+
+def Ordner_prüfen() -> str:
+    Folgen_Dateien = []
+    Pfad = "X:/Aniworld/Aniworld/aniworld.to/anime/stream/"
+    Ordner = os.listdir(Pfad)
+    for i in Ordner:
+        if not os.path.isdir(Pfad + i):
+            Ordner.remove(i)
+    while True:
+        print("Ord: " + str(len(Ordner)))
+        print("Re: " + str(len(Folgen_Dateien)))
+        for i in Ordner:
+            if os.path.isdir(Pfad + i):
+                for a in os.listdir(Pfad + i): Ordner.append(i + "/" + a)
+                Ordner.remove(i)
+            else:
+                Ordner.remove(i)
+                Folgen_Dateien.append(i)
+        if len(Ordner) == 0:
+            break
+    return Folgen_Dateien
+
+for i in Ordner_prüfen():
+    Bilder_Verlinken(i)

@@ -28,18 +28,17 @@ def Staffeln_Suchen():
         with open("X:/Staffeln_gefunden", "w") as file:
             for i in Staffeln:
                 file.write(i + "\n")
-        Staffeln_Prüfen(Staffeln)
 
 def Staffeln_Prüfen(Staffeln):
     Fehlende_Staffeln = []
 
     for i in Staffeln:
-        if not os.path.exists(f"X:/Aniworld/Aniworld/aniworld.to{i}"):
+        if not os.path.exists(f"X:/Aniworld_Datenbank-update/Aniworld/aniworld.to{i}"):
             Fehlende_Staffeln.append(i)
 
     with open("X:/Staffeln_Fehlend", "w") as file:
         for i in Fehlende_Staffeln:
             file.write(i + "\n")
-
+#Staffeln_Suchen()
 Staffeln = open("X:/Staffeln_gefunden", "r").read().split("\n")
 Staffeln_Prüfen(Staffeln)

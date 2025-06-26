@@ -9,7 +9,7 @@ def VMAF_Score_Rechner(Output: Path):
     Array = []
     Höchster_Score = 0.0
     Niedrigster_Score_Array = []
-    Niedrigster_Score_Array_Qualität = [0,0,0,0]
+    Scores = [0,0,0,0]
     Rechnung = 0
     for i in Output:
         try:
@@ -25,6 +25,8 @@ def VMAF_Score_Rechner(Output: Path):
         i = float(i)
         if i > Höchster_Score:
             Höchster_Score = i
+        if 95 <= i <= 100:
+            Scores[0] += 1
     #Finden gleich schlechter Frames
     for i in Array:
         i = float(i)
@@ -35,17 +37,19 @@ def VMAF_Score_Rechner(Output: Path):
     print("Höchster Score: " + str(Höchster_Score))
     print(str(round(len(Niedrigster_Score_Array)/len(Array)*100, 3)) + f"% schlechte Frames (Score 0-69; {len(Niedrigster_Score_Array)} von {len(Array)} Frames)")
 
+
     for i in Niedrigster_Score_Array:
         if 49.5 < i <= 69:
-            Niedrigster_Score_Array_Qualität[0] += 1
+            Scores[1] += 1
         elif 29.5 < i <= 49.5:
-            Niedrigster_Score_Array_Qualität[1] += 1
+            Scores[2] += 1
         elif 0 < i <= 29.5:
-            Niedrigster_Score_Array_Qualität[2] += 1
+            Scores[3] += 1
     try:
-        print(f"\nScores für die schlechten Frames:\nScore 69-50: {Niedrigster_Score_Array_Qualität[0]}; {round(Niedrigster_Score_Array_Qualität[0]/len(Niedrigster_Score_Array)*100, 2)}% Durchschnittliche Qualität, sichtbare Artefakte und Verluste")
-        print(f"Score 30-49: {Niedrigster_Score_Array_Qualität[1]}; {round(Niedrigster_Score_Array_Qualität[1]/len(Niedrigster_Score_Array)*100, 2)}% Unterdurchschnittliche Qualität, deutliche Artefakte und Verluste")
-        print(f"Score 0-29: {Niedrigster_Score_Array_Qualität[2]}; {round(Niedrigster_Score_Array_Qualität[2]/len(Niedrigster_Score_Array)*100, 2)}% Schlechte Qualität, stark beeinträchtigt")
+        print(f"\nScores für die Frames:\nScore 100-95: {Scores[0]}; {round(Scores[0] / len(Array) * 100, 2)}% Netflix' 'Unsichtbare Komprimierung'")
+        print(f"Score 69-50: {Scores[1]}; {round(Scores[1]/len(Niedrigster_Score_Array)*100, 2)}% Durchschnittliche Qualität, sichtbare Artefakte und Verluste")
+        print(f"Score 30-49: {Scores[2]}; {round(Scores[2]/len(Niedrigster_Score_Array)*100, 2)}% Unterdurchschnittliche Qualität, deutliche Artefakte und Verluste")
+        print(f"Score 0-29: {Scores[3]}; {round(Scores[3]/len(Niedrigster_Score_Array)*100, 2)}% Schlechte Qualität, stark beeinträchtigt")
     except ZeroDivisionError:
         print("ZDE")
 

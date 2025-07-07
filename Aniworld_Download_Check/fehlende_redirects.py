@@ -87,16 +87,16 @@ def redirects_zu_echten_Links():
                     if Segmente_Downloaded != 0 and int(i/Speichern) > Segmente_Downloaded:
                         Seite.goto(f"https://aniworld.to/redirect/{Redirects[i]}", timeout=10000)
                         Links_Echt.append(Redirects[i] + "=" + Seite.url)
-                        if len(Links_Echt) == Speichern:
-                            print(str(round(i / len(Redirects) * 100, 3)) + f"% | {int(i/Speichern)} Dateien")
-                            with open(f"X:/links_echt/links_echt_{int(i/Speichern)}", "w") as file:
-                                for a in Links_Echt:
-                                    file.write(a + "\n")
-                            Links_Echt = []
                 except Exception as error:
                     if str(error).split("\n")[0] == "Page.goto: NS_ERROR_UNKNOWN_HOST":
                         Links_Echt.append(Redirects[i] + "=" + "")
                         print("Link nicht mehr verfügbar")
+                if len(Links_Echt) == Speichern:
+                    print(str(round(i / len(Redirects) * 100, 3)) + f"% | {int(i / Speichern)} Dateien")
+                    with open(f"X:/links_echt/links_echt_{int(i / Speichern)}", "w") as file:
+                        for a in Links_Echt:
+                            file.write(a + "\n")
+                    Links_Echt = []
             if Download_neustarten:
                 break
 

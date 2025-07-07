@@ -70,6 +70,7 @@ def redirects_zu_echten_Links():
         Speichern = 10
 
         Segmente_Downloaded = 0
+        Download_neustarten = False
 
         for i in os.listdir("X:/links_echt"):
             Temp = int(i.split("_")[-1])
@@ -78,11 +79,11 @@ def redirects_zu_echten_Links():
 
         if not os.path.exists("X:/links_echt"):
             os.makedirs("X:/links_echt")
-        try:
-            with sync_playwright() as play:
-                Browser = play.firefox.launch(headless=True)
-                Seite = Browser.new_page()
-                for i in range(len(Redirects)):
+        with sync_playwright() as play:
+            Browser = play.firefox.launch(headless=False)
+            Seite = Browser.new_page()
+            for i in range(len(Redirects)):
+                try:
                     if Segmente_Downloaded != 0 and int(i/Speichern) > Segmente_Downloaded:
                         Seite.goto(f"https://aniworld.to/redirect/{Redirects[i]}", timeout=10000)
                         Links_Echt.append(Redirects[i] + "=" + Seite.url)
@@ -92,8 +93,14 @@ def redirects_zu_echten_Links():
                                 for a in Links_Echt:
                                     file.write(a + "\n")
                             Links_Echt = []
-        except:
-            None
+                except Exception as error:
+                    if str(error).split("\n")[0] == "Page.goto: NS_ERROR_UNKNOWN_HOST":
+                        Links_Echt.append(Redirects[i] + "=" + "")
+                        print("Link nicht mehr verfügbar")
+            if Download_neustarten:
+                break
+
+
 
 def redirects_überprüfen():
     Segmente_Downloaded = 0

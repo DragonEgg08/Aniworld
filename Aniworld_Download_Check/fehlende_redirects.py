@@ -80,7 +80,7 @@ def redirects_zu_echten_Links():
         if not os.path.exists("X:/links_echt"):
             os.makedirs("X:/links_echt")
         with sync_playwright() as play:
-            Browser = play.firefox.launch(headless=False)
+            Browser = play.firefox.launch(headless=True)
             Seite = Browser.new_page()
             for i in range(len(Redirects)):
                 try:

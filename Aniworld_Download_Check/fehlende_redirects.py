@@ -110,7 +110,6 @@ def redirects_überprüfen():
             Segmente_Downloaded = Temp
 
     Redirects_Fehlend_Bisher = open("X:/redirects_fehlend.txt").read().split("\n")
-    Redirects_Gefunden_Dateien = os.listdir("X:/links_echt")
     Anzahl_Bevor = len(Redirects_Fehlend_Bisher)
     print("wird überprüft...")
 

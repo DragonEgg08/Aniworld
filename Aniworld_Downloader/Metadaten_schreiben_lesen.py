@@ -24,7 +24,7 @@ def Metadaten_schreiben(Folgen_Metadaten, Serien_Name, Gespeicherte_Staffeln_Pfa
             file.write("\n")
 
 def Metadaten_lesen(Dateiname, Gespeicherte_Staffeln_Pfad):
-    with open(Gespeicherte_Staffeln_Pfad+ Dateiname) as file:
+    with open(Gespeicherte_Staffeln_Pfad + Dateiname) as file:
         # Staffel, Staffelnummer, Folgennummer, Folge, Name, Link
         Folgen_Metadaten = [[], [], [], [], [], [], []]
         Inhalt_Datei = file.read().split("\n")

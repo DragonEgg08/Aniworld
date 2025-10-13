@@ -16,10 +16,14 @@ def Metadaten_lesen(Datei):
             #Folgen_Metadaten[5].append(Inhalt_Datei[4].split(";")[i])
     return Folgen_Metadaten
 
-Metadaten = Metadaten_lesen(input("Bitte Datei mit absolutem Pfad eingeben: "))
-print(Metadaten)
+Metadaten = input("Bitte Datei mit absolutem Pfad eingeben: ")
+if '"' in Metadaten:
+    Metadaten = Metadaten.replace('"', "")
+Metadaten = Metadaten_lesen(Metadaten)
 
 Pfad_Folgen = input("Bitte den Ordner der Folgen, die umbenannt werden sollen eingeben: ")
+if '"' in Pfad_Folgen:
+    Pfad_Folgen = Pfad_Folgen.replace('"', "")
 
 Folgen = os.listdir(Pfad_Folgen)
 #von hier

@@ -32,14 +32,14 @@ def VMAF_Score_Rechner(Output: Path):
     #Finden gleich schlechter Frames
     for i in Array:
         i = float(i)
-        if i >= 92.4:
+        if i >= 92.8:
             Frames_Score_ü_92 += 1
         if 0 <= i <= 85:
             Niedrigster_Score_Array.append(i)
     Endgültige_Qualität.append(Rechnung / len(Array))
     print(f"\nQualität berechnet: {str(Endgültige_Qualität)}")
     print("Höchster Score: " + str(Höchster_Score) + "; Anzahl Score 100: " + str(Frames_Score_100))
-    print("Scores für Frames über 92.4 (transparent): " + str(Frames_Score_ü_92))
+    print("Scores für Frames über 92.8 (transparent): " + str(Frames_Score_ü_92) + " " + str(round(Frames_Score_ü_92 / len(Array) * 100,3)) + "%")
     print(str(round(len(Niedrigster_Score_Array)/len(Array)*100, 3)) + f"% schlechte Frames (Score 0-85); {len(Niedrigster_Score_Array)} von {len(Array)} Frames)")
 
     for i in Niedrigster_Score_Array:

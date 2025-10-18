@@ -81,14 +81,19 @@ def VMAF_Score_Rechner(Output: Path):
 #0-29: Schlechte Qualität, stark beeinträchtigt
 
 def Qualität_berechnen(Video_Original: str, Video_Komprimiert: str):
+    Threads = int(input("Wieviel Threads nutzen?: "))
     Befehl = (
         f'ffmpeg -i {Video_Original} -i {Video_Komprimiert} ' 
         '-lavfi "[0:v]scale[scaled_ref];[scaled_ref]format=yuv420p[ref];'
         '[1:v]scale[scaled_dist];[scaled_dist]format=yuv420p[dist];'
-        '[ref][dist]libvmaf=log_path=vmaf_results.json:log_fmt=json:n_threads=16"'
+        f'[ref][dist]libvmaf=log_path=vmaf_results.json:log_fmt=json:n_threads={Threads}"'
         ' -f null -'
     )
-    os.system(f'start cmd /k "{"X: &&" + Befehl}"')
+    Linux = input("Linux? (y/n)")
+    if Linux.lower() == "y":
+        os.system(f"cd /mnt/ramdisk && {Befehl}")
+    else:
+        os.system(f'start cmd /k "{"X: &&" + Befehl}"')
 
 Was_tun = input("Möchtest du die Qualität berechen [QB] oder die Qualität Auswerten [QA]?: ").lower()
 
